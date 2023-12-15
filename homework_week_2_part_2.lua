@@ -11,19 +11,20 @@ end
 local space = lpeg.S(" \n\t")^0
 
 -- match an integer in base 10
-local int = lpeg.R("09")^1 / node * space
+local int = lpeg.R("09")^1
 
 -- match a hex number
-local hex = ("0" * lpeg.S("xX") * (lpeg.R("09") + lpeg.R("af", "AF"))^1) / node * space
+local hex = ("0" * lpeg.S("xX") * (lpeg.R("09") + lpeg.R("af", "AF"))^1)
 
 -- match a float point number
-local float = ((lpeg.R("09")^1)^-1 * "." * lpeg.R("09")^1) / node * space
+local float = ((lpeg.R("09")^1)^-1 * "." * lpeg.R("09")^1)
 
 -- match a scientific notation number
-local sci = float * lpeg.S("eE") * lpeg.P("-")^-1 * lpeg.R("09")^1 / node * space
+local sci = float * lpeg.S("eE") * lpeg.P("-")^-1 * lpeg.R("09")^1
 
 -- match any of the previously defined numbers
-local numeral = float + sci + hex + int
+-- adding negative unary operator
+local numeral = (lpeg.P("-")^-1 * (float + sci + hex + int)) / node * space
 
 -- operator definitions
 local opA = lpeg.C(lpeg.S("+-")) * space
