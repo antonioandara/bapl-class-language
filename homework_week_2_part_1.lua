@@ -31,6 +31,7 @@ local hex = ("0" * lpeg.S("xX") * (lpeg.R("09") + lpeg.R("af", "AF"))^1) / node 
 -- match any of the previously defined numbers
 local numeral = hex + int
 
+-- Change the program, so it executes multiplication and division, instead of addition and subtraction.
 local opM = lpeg.C(lpeg.S("*/")) * space
 
 local function foldBin(lst)
@@ -79,7 +80,8 @@ local function run (code, stack)
     local pc = 1
     local top = 0
     while pc <= #code do
-        -- print instruction
+        -- Add code to the interpreter loop (function run) so that it prints
+        -- a trace of the instructions it executes.
         print(code[pc])
         if code[pc] == "push" then
             pc = pc + 1
